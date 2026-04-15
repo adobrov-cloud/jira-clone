@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "@remix-run/react";
 import cx from "classix";
 import { useDrag } from "react-dnd";
-import { CategoryId } from "@domain/category";
+import { CategoryId, CategoryType } from "@domain/category";
 import { Issue, IssueId } from "@domain/issue";
 import { PriorityId } from "@domain/priority";
 import { TaskIcon } from "@app/components/icons";
@@ -12,11 +12,13 @@ import { useSortBy } from "@app/hooks/useSortBy";
 export interface DropItem {
   issueId: IssueId;
   categoryId: CategoryId;
+  categoryType: CategoryType;
 }
 
 export const IssueCard = ({
   issue,
   categoryId,
+  categoryType,
   isSubmitting,
   handleDragging,
 }: Props): JSX.Element => {
@@ -34,6 +36,7 @@ export const IssueCard = ({
       item: {
         issueId: issue.id,
         categoryId,
+        categoryType,
       },
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),
@@ -62,6 +65,7 @@ export const IssueCard = ({
 interface Props {
   issue: Issue;
   categoryId: CategoryId;
+  categoryType: CategoryType;
   isSubmitting: boolean;
   handleDragging: (isDragging: boolean) => void;
 }

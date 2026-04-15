@@ -4,12 +4,26 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { RxValueNone } from "react-icons/rx";
 import cx from "classix";
 import { useDrop } from "react-dnd";
-import { Category } from "@domain/category";
+import { Category, CategoryType } from "@domain/category";
 import { Issue, IssueId } from "@domain/issue";
 import { ScrollArea } from "@app/components/scroll-area";
 import { useProjectStore } from "@app/ui/main/project";
 import { useSortBy } from "@app/hooks/useSortBy";
 import { IssueCard, DropItem, DRAG_ISSUE_CARD } from "./issue-card";
+
+/**
+ * Determines if a dragged issue can be dropped into a target column
+ * Enforces workflow rule: PLANNED issues can only move to TODO or stay in PLANNED
+ */
+const canDropIssue = (
+  draggedItem: DropItem,
+  targetType: CategoryType
+): boolean => {
+  if (draggedItem.categoryType === "PLANNED") {
+    return targetType === "TODO" || targetType === "PLANNED";
+  }
+  return true;
+};
 
 export const CategoryColumn = (props: CategoryColumnProps): JSX.Element => {
   const {
@@ -29,15 +43,17 @@ export const CategoryColumn = (props: CategoryColumnProps): JSX.Element => {
     ? `issue/new?category=${category.type}&sortBy=${sortBy}`
     : `issue/new?category=${category.type}`;
 
-  const [{ isOver }, dropRef] = useDrop(
+  const [{ isOver, canDrop }, dropRef] = useDrop(
     () => ({
       accept: DRAG_ISSUE_CARD,
       drop: (item: DropItem) => updateIssueOnCardDrop(item),
+      canDrop: (item: DropItem) => canDropIssue(item, category.type),
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
+        canDrop: !!monitor.canDrop(),
       }),
     }),
-    [category.id]
+    [category.id, category.type]
   );
 
   const updateIssueOnCardDrop = (item: DropItem) => {
@@ -88,14 +104,14 @@ export const CategoryColumn = (props: CategoryColumnProps): JSX.Element => {
       <div
         className={cx(
           "absolute z-50 box-border h-[100%] w-[100%] rounded p-1.5 duration-200",
-          isDragging ? "visible" : "hidden",
+          isDragging && canDrop ? "visible" : "hidden",
           isOver || "bg-background-drop"
         )}
       >
         <div
           className={cx(
             "relative h-full w-full rounded border-[3px]",
-            isDragging ? "visible" : "hidden",
+            isDragging && canDrop ? "visible" : "hidden",
             isOver
               ? "border-solid border-border-success"
               : "flex items-center justify-center border-dashed border-border-brand"
@@ -133,6 +149,7 @@ export const CategoryColumn = (props: CategoryColumnProps): JSX.Element => {
                     <IssueCard
                       issue={issue}
                       categoryId={category.id}
+                      categoryType={category.type}
                       isSubmitting={submittingIssues.includes(issue.id)}
                       handleDragging={handleDragging}
                     />

@@ -4,9 +4,46 @@ import { CategoryId, CategoryType } from "@domain/category";
 import { useProjectStore } from "@app/ui/main/project";
 import * as Select from "@app/components/select";
 
+const getAvailableCategories = (
+  allCategories: Array<{ type: CategoryType; id: CategoryId; name: string }>,
+  initStatus: CategoryType
+) => {
+  // Planned issues can only transition to TODO, not skip ahead to IN_PROGRESS or DONE
+  // This enforces a linear workflow where planned work must be explicitly moved to TODO first
+  if (initStatus === "PLANNED") {
+    return allCategories.filter(
+      (cat) => cat.type === "PLANNED" || cat.type === "TODO"
+    );
+  }
+  return allCategories;
+};
+
+const getTriggerClassName = (status: CategoryType): string => {
+  const statusStyles: Record<CategoryType, string> = {
+    PLANNED:
+      "hover:bg-background-accent-teal-bolder-hovered !bg-background-accent-teal-bolder",
+    TODO: "hover:bg-background-accent-grey-bolder-hovered !bg-background-accent-grey-bolder",
+    IN_PROGRESS:
+      "hover:bg-background-accent-blue-bolder-hovered !bg-background-accent-blue-bolder",
+    DONE: "hover:bg-background-accent-green-bolder-hovered !bg-background-accent-green-bolder",
+  };
+  return statusStyles[status];
+};
+
+const getItemClassName = (categoryType: CategoryType): string => {
+  const categoryStyles: Record<CategoryType, string> = {
+    PLANNED: "bg-background-accent-teal-subtler text-font-accent-teal",
+    TODO: "bg-background-accent-grey-subtler text-font-accent-grey",
+    IN_PROGRESS: "bg-background-accent-blue-subtler text-font-accent-blue",
+    DONE: "bg-background-accent-green-subtler text-font-accent-green",
+  };
+  return categoryStyles[categoryType];
+};
+
 export const SelectStatus = ({ initStatus }: Props): JSX.Element => {
   const projectStore = useProjectStore();
-  const categories = projectStore.project.categories;
+  const allCategories = projectStore.project.categories;
+  const categories = getAvailableCategories(allCategories, initStatus);
   const initCategory = categories.find(
     (category) => category.type === initStatus
   );
@@ -35,12 +72,7 @@ export const SelectStatus = ({ initStatus }: Props): JSX.Element => {
         aria-label="Open status select"
         className={cx(
           "!text-font-inverse hover:!opacity-80",
-          selectedStatus === "TODO" &&
-            "hover:bg-background-accent-grey-bolder-hovered !bg-background-accent-grey-bolder",
-          selectedStatus === "IN_PROGRESS" &&
-            "hover:bg-background-accent-blue-bolder-hovered !bg-background-accent-blue-bolder",
-          selectedStatus === "DONE" &&
-            "hover:bg-background-accent-green-bolder-hovered !bg-background-accent-green-bolder"
+          getTriggerClassName(selectedStatus)
         )}
       >
         <Select.Value className="pt-1" />
@@ -55,12 +87,7 @@ export const SelectStatus = ({ initStatus }: Props): JSX.Element => {
               <span
                 className={cx(
                   "flex w-fit items-center gap-2 rounded px-1 py-0.5 text-2xs uppercase",
-                  category.type === "TODO" &&
-                    "bg-background-accent-grey-subtler text-font-accent-grey",
-                  category.type === "IN_PROGRESS" &&
-                    "bg-background-accent-blue-subtler text-font-accent-blue",
-                  category.type === "DONE" &&
-                    "bg-background-accent-green-subtler text-font-accent-green"
+                  getItemClassName(category.type)
                 )}
               >
                 <Select.ItemText>{category.name}</Select.ItemText>
