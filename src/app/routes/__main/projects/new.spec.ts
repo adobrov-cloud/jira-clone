@@ -1,44 +1,59 @@
 import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
+// Max length enforced by project name validation
+const MAX_PROJECT_NAME_LENGTH = 30;
+
+/**
+ * Generate a unique project name using timestamp and Faker.
+ * Truncated to fit within project name length constraints.
+ */
+function generateProjectName(): string {
+  const timestamp = new Date().toISOString();
+  const productName = faker.commerce.productName();
+  const fullProjectName = `${timestamp} ${productName}`;
+  return fullProjectName.substring(0, MAX_PROJECT_NAME_LENGTH);
+}
+
+function getTitleInput(page: any) {
+  return page.locator('textarea[name="title"]');
+}
+
+function getAcceptButton(page: any) {
+  return page.getByRole("button", { name: "Accept changes" });
+}
+
 test.describe("Create New Project", () => {
   test.beforeEach(async ({ page }) => {
-    // Login as default user (Daniel Serrano)
+    // Login as default user (Daniel Serrano) to establish session
     await page.goto("/login");
     await page.getByRole("button", { name: "Login" }).click();
     await expect(page).toHaveURL(/.*projects/);
   });
 
   test("creates project with Faker-generated name", async ({ page }) => {
-    // Navigate to create project page
     await page.goto("/projects/new");
 
-    // Wait for the dialog to be visible
+    // Wait for form to be ready
     await expect(page.getByText("Create new project")).toBeVisible();
 
-    // Generate project name: timestamp + Faker product name, truncated to 30 chars
-    const timestamp = new Date().toISOString();
-    const productName = faker.commerce.productName();
-    const fullProjectName = `${timestamp} ${productName}`;
-    const projectName = fullProjectName.substring(0, 30);
+    const projectName = generateProjectName();
 
-    // Fill in the project name
-    const titleInput = page.locator('textarea[name="title"]');
+    const titleInput = getTitleInput(page);
     await titleInput.clear();
     await titleInput.fill(projectName);
 
-    // Verify at least one user is checked (logged-in user should be pre-checked)
+    // Verify pre-condition: logged-in user should be pre-selected
     const checkedUserCheckboxes = page.locator('input[name="user"]:checked');
     const checkedCount = await checkedUserCheckboxes.count();
     expect(checkedCount).toBeGreaterThan(0);
 
-    // Submit the form using the Accept button
-    await page.getByRole("button", { name: "Accept changes" }).click();
+    await getAcceptButton(page).click();
 
-    // Verify redirect to projects list
+    // Verify successful creation: redirect to projects list
     await expect(page).toHaveURL(/.*\/projects$/);
 
-    // Verify the new project appears in the list
+    // Verify the new project is visible in the list
     await expect(page.getByText(projectName)).toBeVisible();
   });
 
@@ -50,14 +65,12 @@ test.describe("Create New Project", () => {
   test("form validation: requires project name", async ({ page }) => {
     await page.goto("/projects/new");
 
-    // Clear the title input
-    const titleInput = page.locator('textarea[name="title"]');
+    const titleInput = getTitleInput(page);
     await titleInput.clear();
 
-    // Try to submit with empty name
-    await page.getByRole("button", { name: "Accept changes" }).click();
+    await getAcceptButton(page).click();
 
-    // Should still be on the create page with error
+    // Form should not submit; error message should be shown
     await expect(page.getByText("Name is required")).toBeVisible();
   });
 });
