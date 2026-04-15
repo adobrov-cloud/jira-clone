@@ -53,6 +53,9 @@ export const getProject = async (
             orderBy: orderBy,
           },
         },
+        orderBy: {
+          order: "asc",
+        },
       },
     },
   });

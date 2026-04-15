@@ -6,7 +6,14 @@ import * as Select from "@app/components/select";
 
 export const SelectStatus = ({ initStatus }: Props): JSX.Element => {
   const projectStore = useProjectStore();
-  const categories = projectStore.project.categories;
+  const allCategories = projectStore.project.categories;
+  // When issue is in PLANNED status, only show PLANNED and TODO options
+  const categories =
+    initStatus === "PLANNED"
+      ? allCategories.filter(
+          (cat) => cat.type === "PLANNED" || cat.type === "TODO"
+        )
+      : allCategories;
   const initCategory = categories.find(
     (category) => category.type === initStatus
   );
@@ -35,6 +42,8 @@ export const SelectStatus = ({ initStatus }: Props): JSX.Element => {
         aria-label="Open status select"
         className={cx(
           "!text-font-inverse hover:!opacity-80",
+          selectedStatus === "PLANNED" &&
+            "hover:bg-background-accent-teal-bolder-hovered !bg-background-accent-teal-bolder",
           selectedStatus === "TODO" &&
             "hover:bg-background-accent-grey-bolder-hovered !bg-background-accent-grey-bolder",
           selectedStatus === "IN_PROGRESS" &&
@@ -55,6 +64,8 @@ export const SelectStatus = ({ initStatus }: Props): JSX.Element => {
               <span
                 className={cx(
                   "flex w-fit items-center gap-2 rounded px-1 py-0.5 text-2xs uppercase",
+                  category.type === "PLANNED" &&
+                    "bg-background-accent-teal-subtler text-font-accent-teal",
                   category.type === "TODO" &&
                     "bg-background-accent-grey-subtler text-font-accent-grey",
                   category.type === "IN_PROGRESS" &&

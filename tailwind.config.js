@@ -23,6 +23,7 @@ module.exports = {
           green: "var(--color-font-accent-green)",
           blue: "var(--color-font-accent-blue)",
           grey: "var(--color-font-accent-grey)",
+          teal: "var(--color-font-accent-teal)",
         },
       },
       link: {
@@ -163,6 +164,12 @@ module.exports = {
             subtler: "var(--color-background-accent-grey-subtler)",
             subtle: "var(--color-background-accent-grey-subtle)",
             bolder: "var(--color-background-accent-grey-bolder)",
+          },
+          teal: {
+            subtlest: "var(--color-background-accent-teal-subtlest)",
+            subtler: "var(--color-background-accent-teal-subtler)",
+            subtle: "var(--color-background-accent-teal-subtle)",
+            bolder: "var(--color-background-accent-teal-bolder)",
           },
         },
       },

@@ -12,6 +12,8 @@ import { Issue } from "./issue";
 const createdAt = new Date("2022-01-18 11:00").valueOf();
 
 // PROJECT 1
+export const plannedIssuesMock1: Issue[] = [];
+
 export const todoIssuesMock1: Issue[] = [
   {
     id: "4db55cbf-222d-424a-b23b-08e61534c706",
@@ -87,6 +89,8 @@ export const doneIssuesMock1: Issue[] = [
 ];
 
 // PROJECT 2
+export const plannedIssuesMock2: Issue[] = [];
+
 export const todoIssuesMock2: Issue[] = [
   {
     id: "f3efefcf-7859-4241-8b03-4ae815183355",
@@ -134,9 +138,11 @@ export const inProgressIssuesMock2: Issue[] = [
 export const doneIssuesMock2: Issue[] = [];
 
 export const defaultIssuesIds = [
+  plannedIssuesMock1,
   todoIssuesMock1,
   inProgressIssuesMock1,
   doneIssuesMock1,
+  plannedIssuesMock2,
   todoIssuesMock2,
   inProgressIssuesMock2,
   doneIssuesMock2,
