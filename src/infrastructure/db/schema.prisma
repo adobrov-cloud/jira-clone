@@ -45,6 +45,7 @@ model Category {
 
 model Issue {
   id          String    @id @default(uuid())
+  key         String    @unique
   category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String
   name        String

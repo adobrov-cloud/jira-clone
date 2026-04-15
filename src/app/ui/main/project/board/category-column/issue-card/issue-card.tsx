@@ -20,11 +20,10 @@ export const IssueCard = ({
   isSubmitting,
   handleDragging,
 }: Props): JSX.Element => {
-  const issueIdPrefix = issue.id.split("-")[0];
   const sortBy = useSortBy();
   const issueLink = sortBy
-    ? `issue/${issue.id}?sortBy=${sortBy}`
-    : `issue/${issue.id}`;
+    ? `issue/${issue.key}?sortBy=${sortBy}`
+    : `issue/${issue.key}`;
 
   type Collected = { isDragging: boolean };
 
@@ -52,7 +51,7 @@ export const IssueCard = ({
         link={issueLink}
         name={issue.name}
         priorityId={issue.priority.id}
-        idPrefix={issueIdPrefix}
+        idPrefix={issue.key}
         isSubmitting={isSubmitting}
       />
     </div>

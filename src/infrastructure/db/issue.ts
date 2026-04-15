@@ -5,6 +5,7 @@ import { IssueId, Issue } from "@domain/issue";
 import { Priority, PriorityId } from "@domain/priority";
 import { Comment } from "@domain/comment";
 import { dnull } from "src/utils/dnull";
+import { formatIssueKey } from "@utils/issue-key";
 import { db } from "./db.server";
 
 export const getIssue = async (issueId: IssueId): Promise<Issue | null> => {
@@ -34,6 +35,7 @@ export const getIssue = async (issueId: IssueId): Promise<Issue | null> => {
 
   const issue: Issue = {
     id: issueDb.id,
+    key: issueDb.key,
     name: issueDb.name,
     description: issueDb.description || undefined,
     categoryType: issueDb.category.type as CategoryType,
@@ -66,10 +68,65 @@ export type CreateIssueInputData = {
   reporterId: UserId;
   comments: Comment[];
 };
+export const getIssueByKey = async (key: string): Promise<Issue | null> => {
+  const issueDb = await db.issue.findUnique({
+    where: {
+      key,
+    },
+    include: {
+      asignee: true,
+      reporter: true,
+      category: true,
+      priority: true,
+      comments: {
+        include: {
+          user: true,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+    },
+  });
+
+  if (!issueDb) {
+    return null;
+  }
+
+  const issue: Issue = {
+    id: issueDb.id,
+    key: issueDb.key,
+    name: issueDb.name,
+    description: issueDb.description || undefined,
+    categoryType: issueDb.category.type as CategoryType,
+    priority: issueDb.priority as Priority,
+    asignee: dnull(issueDb.asignee),
+    reporter: dnull(issueDb.reporter),
+    comments: issueDb.comments.map((comment) => ({
+      ...comment,
+      createdAt: comment.createdAt.getTime(),
+      updatedAt: comment.updatedAt.getTime(),
+      user: dnull({
+        ...comment.user,
+        createdAt: comment.user.createdAt.getTime(),
+        updatedAt: comment.user.updatedAt.getTime(),
+      }),
+    })),
+    createdAt: issueDb.createdAt.getTime(),
+    updatedAt: issueDb.updatedAt.getTime(),
+  };
+
+  return issue;
+};
+
 export const createIssue = async (issue: CreateIssueInputData): Promise<IssueId> => {
+  const issueCount = await db.issue.count();
+  const key = formatIssueKey(issueCount + 1);
+
   const newIssue = await db.issue.create({
     data: {
       ...issue,
+      key,
       priority: undefined,
       priorityId: issue.priority,
       comments: {

@@ -7,7 +7,7 @@ import { IssueId } from "@domain/issue";
 import { TaskIcon } from "@app/components/icons";
 
 export const PanelHeaderIssue = ({
-  id,
+  issueKey,
   deleteDisabled,
 }: PanelHeaderIssueProps): JSX.Element => {
   const location = useLocation();
@@ -19,7 +19,7 @@ export const PanelHeaderIssue = ({
         <span className="flex items-center">
           <TaskIcon size={20} />
         </span>
-        <span className="ml-1 text-font-subtlest text-opacity-80">{id}</span>
+        <span className="ml-1 text-font-subtlest text-opacity-80">{issueKey}</span>
       </span>
       <DeleteIssueModalDialog disabled={deleteDisabled} />
       <Link
@@ -34,7 +34,7 @@ export const PanelHeaderIssue = ({
 };
 
 interface PanelHeaderIssueProps {
-  id: IssueId;
+  issueKey: string;
   deleteDisabled?: boolean;
 }
 

@@ -78,6 +78,7 @@ const createIssueIfNotExists = async (issue: Issue, categoryId: CategoryId): Pro
     where: { id: issue.id },
     create: {
       id: issue.id,
+      key: issue.key,
       name: issue.name,
       description: issue.description,
       category: { connect: { id: categoryId } },

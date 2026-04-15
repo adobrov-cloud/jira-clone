@@ -62,7 +62,7 @@ export const Default: Story = {
           link={args?.link || "https://google.com"}
           name={args?.name || "Issue name"}
           priorityId={args?.priorityId || "low"}
-          idPrefix={args?.idPrefix || "1234"}
+          idPrefix={args?.idPrefix || "PROJ-0001"}
           isSubmitting={args?.isSubmitting || false}
         />
       ))}
@@ -75,7 +75,7 @@ export const Standard: Story = {
     link: "https://google.com",
     name: "Issue 1",
     priorityId: "high",
-    idPrefix: "1234",
+    idPrefix: "PROJ-0001",
     isSubmitting: false,
   },
 };
@@ -85,7 +85,7 @@ export const LongName: Story = {
     link: "https://google.com",
     name: "This is a very long issue name that should be truncated",
     priorityId: "high",
-    idPrefix: "1234",
+    idPrefix: "PROJ-0002",
     isSubmitting: false,
   },
 };
@@ -95,7 +95,7 @@ export const Submitting: Story = {
     link: "https://google.com",
     name: "Submitting issue",
     priorityId: "low",
-    idPrefix: "1234",
+    idPrefix: "PROJ-0003",
     isSubmitting: true,
   },
 };

@@ -6,6 +6,7 @@ import { Priority } from "../priority";
 export type IssueId = string;
 export interface Issue {
   id: UserId;
+  key: string;
   name: string;
   description?: string;
   categoryType?: CategoryType;

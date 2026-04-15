@@ -44,6 +44,7 @@ export const getProject = async (
           issues: {
             select: {
               id: true,
+              key: true,
               name: true,
               priority: true,
               createdAt: true,
@@ -74,6 +75,7 @@ export const getProject = async (
       order: category.order,
       issues: category.issues.map((issue) => ({
         id: issue.id,
+        key: issue.key,
         name: issue.name,
         priority: issue.priority as Priority,
         reporter: dnull(issue.reporter),

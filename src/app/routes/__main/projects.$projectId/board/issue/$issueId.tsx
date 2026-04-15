@@ -17,6 +17,7 @@ import { PriorityId } from "@domain/priority";
 import { isValidSort } from "@domain/filter";
 import {
   getIssue,
+  getIssueByKey,
   updateIssue,
   deleteIssue,
   UpdateIssueInputData,
@@ -34,7 +35,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   const description = issue.description || "No description";
   const image =
     "https://jira-clone.fly.dev/static/images/readme/issue-panel.png";
-  const url = `https://jira-clone.fly.dev/projects/${projectId}/board/issue/${issue.name}`;
+  const url = `https://jira-clone.fly.dev/projects/${projectId}/board/issue/${issue.key}`;
 
   const tags = {
     charset: "utf-8",
@@ -79,11 +80,11 @@ export type ActionData = {
 
 export const loader: LoaderFunction = async ({ params }) => {
   const projectId = params.projectId as ProjectId;
-  const issueId = params.issueId as IssueId;
+  const issueKey = params.issueId as string;
 
   invariant(params.projectId, `params.projectId is required`);
 
-  const issue = await getIssue(issueId);
+  const issue = await getIssueByKey(issueKey);
 
   if (!issue) {
     throw new Response("Not Found", {
@@ -95,7 +96,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const id = params.issueId as IssueId;
+  const issueKey = params.issueId as string;
   const projectId = params.projectId as ProjectId;
   const formData = await request.formData();
   const _action = formData.get("_action") as string;
@@ -105,6 +106,13 @@ export const action: ActionFunction = async ({ request, params }) => {
     ? `?sortBy=${sortByParam}`
     : "";
   const previousUrl = `/projects/${projectId}/board${sortBySeachParam}`;
+
+  // Resolve key to internal ID for DB operations
+  const issue = await getIssueByKey(issueKey);
+  if (!issue) {
+    throw new Response("Not Found", { status: 404 });
+  }
+  const id = issue.id;
 
   if (_action === "update") {
     const name = formData.get("title") as string;
@@ -150,7 +158,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     if (!commentId) return null;
 
     await deleteComment(commentId);
-    return redirect(`/projects/${projectId}/board/issue/${id}`, 202);
+    return redirect(`/projects/${projectId}/board/issue/${issueKey}`, 202);
   }
 
   return redirect(previousUrl);
