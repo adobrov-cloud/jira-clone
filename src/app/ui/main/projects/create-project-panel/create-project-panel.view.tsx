@@ -15,6 +15,10 @@ import { Description } from "@app/components/description";
 import { Kbd } from "@app/components/kbd-placeholder";
 import { CreateProjectPanelHeader } from "./create-project-panel-header";
 
+// Increased from 30 to 80 to accommodate timestamped test project names
+// (YYYY-MM-DDTHH:mm:ss.sss + space + product name ~= 50-70 chars)
+const PROJECT_TITLE_MAX_LENGTH = 80;
+
 export const CreateProjectPanelView = ({
   project,
   users,
@@ -108,7 +112,7 @@ export const CreateProjectPanelView = ({
                   <Dialog.Title className="-ml-3 mb-8 mt-5">
                     <Title
                       initTitle={project?.name || ""}
-                      maxLength={30}
+                      maxLength={PROJECT_TITLE_MAX_LENGTH}
                       error={actionData?.errors?.name}
                     />
                   </Dialog.Title>
