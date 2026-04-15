@@ -11,12 +11,11 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { UserId } from "@domain/user";
 import { ProjectId } from "@domain/project";
 import { CategoryId } from "@domain/category";
-import { Issue, IssueId } from "@domain/issue";
+import { Issue } from "@domain/issue";
 import { Comment, CommentId } from "@domain/comment";
 import { PriorityId } from "@domain/priority";
 import { isValidSort } from "@domain/filter";
 import {
-  getIssue,
   getIssueByKey,
   updateIssue,
   deleteIssue,
@@ -107,7 +106,8 @@ export const action: ActionFunction = async ({ request, params }) => {
     : "";
   const previousUrl = `/projects/${projectId}/board${sortBySeachParam}`;
 
-  // Resolve key to internal ID for DB operations
+  // Resolve the human-readable key (e.g., "PROJ-0001") to the internal UUID
+  // The key is used in URLs for better UX, but DB operations require the internal ID
   const issue = await getIssueByKey(issueKey);
   if (!issue) {
     throw new Response("Not Found", { status: 404 });
@@ -147,7 +147,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   if (_action === "delete") {
-    console.log("DELETING ISSUE");
     await deleteIssue(id);
     emitter.emit(EVENTS.ISSUE_DELETED, Date.now());
   }
@@ -158,7 +157,10 @@ export const action: ActionFunction = async ({ request, params }) => {
     if (!commentId) return null;
 
     await deleteComment(commentId);
-    return redirect(`/projects/${projectId}/board/issue/${issueKey}`, 202);
+    return redirect(
+      `/projects/${projectId}/board/issue/${issueKey}`,
+      202
+    );
   }
 
   return redirect(previousUrl);
