@@ -11,6 +11,20 @@ import { useProjectStore } from "@app/ui/main/project";
 import { useSortBy } from "@app/hooks/useSortBy";
 import { IssueCard, DropItem, DRAG_ISSUE_CARD } from "./issue-card";
 
+/**
+ * Determines if a dragged issue can be dropped into a target column
+ * Enforces workflow rule: PLANNED issues can only move to TODO or stay in PLANNED
+ */
+const canDropIssue = (
+  draggedItem: DropItem,
+  targetType: CategoryType
+): boolean => {
+  if (draggedItem.categoryType === "PLANNED") {
+    return targetType === "TODO" || targetType === "PLANNED";
+  }
+  return true;
+};
+
 export const CategoryColumn = (props: CategoryColumnProps): JSX.Element => {
   const {
     category,
@@ -33,13 +47,7 @@ export const CategoryColumn = (props: CategoryColumnProps): JSX.Element => {
     () => ({
       accept: DRAG_ISSUE_CARD,
       drop: (item: DropItem) => updateIssueOnCardDrop(item),
-      canDrop: (item: DropItem) => {
-        // Planned issues can only be dropped on TODO or back to PLANNED
-        if (item.categoryType === "PLANNED") {
-          return category.type === "TODO" || category.type === "PLANNED";
-        }
-        return true;
-      },
+      canDrop: (item: DropItem) => canDropIssue(item, category.type),
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
         canDrop: !!monitor.canDrop(),

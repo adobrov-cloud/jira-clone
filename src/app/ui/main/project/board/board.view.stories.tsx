@@ -1,13 +1,21 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react";
 import { unstable_createRemixStub as createRemixStub } from "@remix-run/testing";
 import { BoardView } from "./board.view";
 import { Project } from "@domain/project";
 import { Category, CategoryType } from "@domain/category";
 import { Issue } from "@domain/issue";
 import { usersMock, userMock1, userMock2 } from "@domain/user";
-import { priorityHigh, priorityMedium, priorityLow } from "@domain/priority";
+import {
+  priorityHigh,
+  priorityMedium,
+  priorityLow,
+} from "@domain/priority";
 
-// Mock issues for each category - diverse and realistic data
+// Mock data for Storybook stories demonstrating the 4-column board
+// (PLANNED, TODO, IN_PROGRESS, DONE)
+// The PLANNED column is a new addition that represents work in the
+// planning/backlog stage
+
 const plannedIssues: Issue[] = [
   {
     id: "planned-001-uuid-example",
@@ -140,7 +148,8 @@ const doneIssues: Issue[] = [
   },
 ];
 
-// Categories with the new PLANNED column first (order 0)
+// Categories ordered by workflow:
+// PLANNED (0) → TODO (1) → IN_PROGRESS (2) → DONE (3)
 const categories: Category[] = [
   {
     id: "cat-planned-001",
@@ -180,7 +189,6 @@ const categories: Category[] = [
   },
 ];
 
-// Project mock with all 4 categories
 const mockProject: Project = {
   id: "project-board-story",
   name: "Board View Demo Project",
@@ -192,10 +200,9 @@ const mockProject: Project = {
   updatedAt: Date.now(),
 };
 
-// Create a wrapper component that renders inside RemixStub
 const BoardViewWrapper = ({ project }: { project: Project }) => {
   return (
-    <div className="h-screen w-full p-4 bg-elevation-surface">
+    <div className="h-screen w-full bg-elevation-surface p-4">
       <BoardView project={project} />
     </div>
   );
@@ -208,7 +215,7 @@ const meta: Meta<typeof BoardView> = {
     layout: "fullscreen",
   },
   decorators: [
-    (Story, context) => {
+    (Story, context: { args: { project?: Project } }) => {
       const project = context.args.project || mockProject;
       const RemixStub = createRemixStub([
         {

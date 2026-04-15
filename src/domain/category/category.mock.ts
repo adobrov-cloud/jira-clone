@@ -19,12 +19,7 @@ const ids1 = [
   "46964edd-62e0-4c2f-90bf-e275ee087433",
   "c1278ad3-29b3-422c-8219-54bb66b26ff4",
 ];
-const issuesMock1 = [
-  plannedIssuesMock1,
-  todoIssuesMock1,
-  inProgressIssuesMock1,
-  doneIssuesMock1,
-];
+const issuesMock1 = [plannedIssuesMock1, todoIssuesMock1, inProgressIssuesMock1, doneIssuesMock1];
 
 const ids2 = [
   "4e2f7b9a-c6d3-4a1b-8e5f-2d9c3a6b1e7f",
@@ -32,12 +27,7 @@ const ids2 = [
   "14055a19-1a79-4b16-90fb-811652e33128",
   "aa102bcb-335c-4d82-8392-058f6172ebe8",
 ];
-const issuesMock2 = [
-  plannedIssuesMock2,
-  todoIssuesMock2,
-  inProgressIssuesMock2,
-  doneIssuesMock2,
-];
+const issuesMock2 = [plannedIssuesMock2, todoIssuesMock2, inProgressIssuesMock2, doneIssuesMock2];
 
 export const categoriesMock1: Category[] = categoryTypes.map((categoryType, index) => {
   const id = ids1[index];
