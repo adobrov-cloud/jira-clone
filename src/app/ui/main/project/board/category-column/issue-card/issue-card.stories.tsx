@@ -61,6 +61,7 @@ export const Default: Story = {
           key={index}
           link={args?.link || "https://google.com"}
           name={args?.name || "Issue name"}
+          type={args?.type || "task"}
           priorityId={args?.priorityId || "low"}
           idPrefix={args?.idPrefix || "1234"}
           isSubmitting={args?.isSubmitting || false}
@@ -74,6 +75,7 @@ export const Standard: Story = {
   args: {
     link: "https://google.com",
     name: "Issue 1",
+    type: "task",
     priorityId: "high",
     idPrefix: "1234",
     isSubmitting: false,
@@ -84,6 +86,7 @@ export const LongName: Story = {
   args: {
     link: "https://google.com",
     name: "This is a very long issue name that should be truncated",
+    type: "bug",
     priorityId: "high",
     idPrefix: "1234",
     isSubmitting: false,
@@ -94,6 +97,7 @@ export const Submitting: Story = {
   args: {
     link: "https://google.com",
     name: "Submitting issue",
+    type: "story",
     priorityId: "low",
     idPrefix: "1234",
     isSubmitting: true,

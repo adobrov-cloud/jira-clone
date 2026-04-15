@@ -43,12 +43,8 @@ export const getProject = async (
       categories: {
         include: {
           issues: {
-            select: {
-              id: true,
-              name: true,
-              type: true,
+            include: {
               priority: true,
-              createdAt: true,
               reporter: true,
               asignee: true,
             },
@@ -77,7 +73,7 @@ export const getProject = async (
       issues: category.issues.map((issue) => ({
         id: issue.id,
         name: issue.name,
-        type: (issue.type as IssueTypeId) || "task",
+        type: ((issue as any).type as IssueTypeId) || "task",
         priority: issue.priority as Priority,
         reporter: dnull(issue.reporter),
         asignee: dnull(issue.asignee),
@@ -97,7 +93,9 @@ interface GetProjectOptions {
   sortIssuesBy: Sort;
 }
 
-export const getProjectSummary = async (projectId: ProjectId): Promise<ProjectSummary | null> => {
+export const getProjectSummary = async (
+  projectId: ProjectId
+): Promise<ProjectSummary | null> => {
   const projectSummaryDb = await db.project.findUnique({
     where: { id: projectId },
     select: {
@@ -124,7 +122,9 @@ export const getProjectSummary = async (projectId: ProjectId): Promise<ProjectSu
   return projectSummary;
 };
 
-export const getProjectsSummary = async (userId: UserId): Promise<ProjectSummary[]> => {
+export const getProjectsSummary = async (
+  userId: UserId
+): Promise<ProjectSummary[]> => {
   const projectsSummaryDb = await db.project.findMany({
     where: {
       users: {
@@ -145,13 +145,15 @@ export const getProjectsSummary = async (userId: UserId): Promise<ProjectSummary
     },
   });
 
-  const projectsSummary: ProjectSummary[] = projectsSummaryDb.map((projectSummaryDb) => ({
-    id: projectSummaryDb.id,
-    name: projectSummaryDb.name,
-    image: projectSummaryDb.image,
-    description: projectSummaryDb.description || "",
-    createdAt: projectSummaryDb.createdAt.getDate(),
-  }));
+  const projectsSummary: ProjectSummary[] = projectsSummaryDb.map(
+    (projectSummaryDb) => ({
+      id: projectSummaryDb.id,
+      name: projectSummaryDb.name,
+      image: projectSummaryDb.image,
+      description: projectSummaryDb.description || "",
+      createdAt: projectSummaryDb.createdAt.getDate(),
+    })
+  );
 
   return projectsSummary;
 };
@@ -163,7 +165,9 @@ type CreateProjectInput = {
   userIds: UserId[];
   categories: Omit<Category, "id">[];
 };
-export const createProject = async (project: CreateProjectInput): Promise<void> => {
+export const createProject = async (
+  project: CreateProjectInput
+): Promise<void> => {
   await db.project.create({
     data: {
       name: project.name,

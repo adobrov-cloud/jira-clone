@@ -1,19 +1,31 @@
 import cx from "classix";
 import { FaCheckSquare, FaBug, FaBookmark } from "react-icons/fa";
 import { IssueTypeId } from "@domain/issue-type";
+import type { IconType } from "react-icons";
 
-export const IssueTypeIcon = ({ type, size = 18 }: IssueTypeIconProps): JSX.Element => {
-  const iconClass = cx(
-    "flex",
-    type === "task" && "text-icon-accent-blue",
-    type === "bug" && "text-icon-accent-red",
-    type === "story" && "text-icon-accent-green"
-  );
+// Maps issue types to their corresponding icon components
+const ISSUE_TYPE_ICONS: Record<IssueTypeId, IconType> = {
+  task: FaCheckSquare,
+  bug: FaBug,
+  story: FaBookmark,
+};
 
-  const Icon = type === "bug" ? FaBug : type === "story" ? FaBookmark : FaCheckSquare;
+// Maps issue types to their color classes — matches Jira's visual language
+const ISSUE_TYPE_COLORS: Record<IssueTypeId, string> = {
+  task: "text-icon-accent-blue",
+  bug: "text-icon-accent-red",
+  story: "text-icon-accent-green",
+};
+
+export const IssueTypeIcon = ({
+  type,
+  size = 18,
+}: IssueTypeIconProps): JSX.Element => {
+  const Icon = ISSUE_TYPE_ICONS[type];
+  const colorClass = ISSUE_TYPE_COLORS[type];
 
   return (
-    <span className={iconClass}>
+    <span className={cx("flex", colorClass)}>
       <Icon size={size} />
     </span>
   );

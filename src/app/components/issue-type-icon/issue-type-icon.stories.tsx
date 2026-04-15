@@ -20,8 +20,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const AllTypes: Story = {
+  args: {
+    type: "task",
+    size: 24,
+  },
   render: () => (
-    <div className="flex gap-6 items-center p-4">
+    <div className="flex items-center gap-6 p-4">
       <div className="flex flex-col items-center gap-2">
         <IssueTypeIcon type="task" size={24} />
         <span className="text-sm text-font-subtle">Task (Blue)</span>
