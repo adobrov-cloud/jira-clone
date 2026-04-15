@@ -3,6 +3,7 @@ import { UserId } from "@domain/user";
 import { CategoryType, CategoryId } from "@domain/category";
 import { IssueId, Issue } from "@domain/issue";
 import { Priority, PriorityId } from "@domain/priority";
+import { IssueTypeId } from "@domain/issue-type";
 import { Comment } from "@domain/comment";
 import { dnull } from "src/utils/dnull";
 import { db } from "./db.server";
@@ -36,6 +37,7 @@ export const getIssue = async (issueId: IssueId): Promise<Issue | null> => {
     id: issueDb.id,
     name: issueDb.name,
     description: issueDb.description || undefined,
+    type: (issueDb.type as IssueTypeId) || "task",
     categoryType: issueDb.category.type as CategoryType,
     priority: issueDb.priority as Priority,
     asignee: dnull(issueDb.asignee),
@@ -60,6 +62,7 @@ export const getIssue = async (issueId: IssueId): Promise<Issue | null> => {
 export type CreateIssueInputData = {
   name: string;
   description: string;
+  type?: IssueTypeId;
   categoryId: CategoryId;
   priority: PriorityId;
   asigneeId: UserId;

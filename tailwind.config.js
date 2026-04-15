@@ -42,6 +42,7 @@ module.exports = {
           green: "var(--color-icon-accent-green)",
           yellow: "var(--color-icon-accent-yellow)",
           red: "var(--color-icon-accent-red)",
+          blue: "var(--color-icon-accent-blue)",
         },
       },
       border: {

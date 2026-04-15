@@ -10,6 +10,7 @@ import { ProjectId } from "@domain/project";
 import { CategoryId } from "@domain/category";
 import { Comment } from "@domain/comment";
 import { PriorityId } from "@domain/priority";
+import { IssueTypeId } from "@domain/issue-type";
 import { isValidSort } from "@domain/filter";
 import { createIssue, CreateIssueInputData } from "@infrastructure/db/issue";
 import { IssuePanel } from "@app/ui/main/project/board/issue-panel";
@@ -86,6 +87,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   if (_action === "create") {
     const name = formData.get("title") as string;
     const description = formData.get("description") as string;
+    const type = formData.get("type") as IssueTypeId | null;
     const categoryId = formData.get("status") as CategoryId;
     const priority = formData.get("priority") as PriorityId;
     const asigneeId = formData.get("asignee") as UserId;
@@ -96,6 +98,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     const issueInputData: CreateIssueInputData = {
       name,
       description,
+      type: type || undefined,
       categoryId,
       priority,
       asigneeId,

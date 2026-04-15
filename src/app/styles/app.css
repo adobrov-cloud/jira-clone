@@ -189,6 +189,7 @@
   --color-icon-accent-green: var(--Green600);
   --color-icon-accent-yellow: var(--Yellow400);
   --color-icon-accent-red: var(--Red600);
+  --color-icon-accent-blue: var(--Blue600);
 
   /* Border */
   --color-border: var(--Neutral300A);
@@ -326,6 +327,7 @@
   --color-icon-accent-green: var(--Green500);
   --color-icon-accent-yellow: var(--Yellow500);
   --color-icon-accent-red: var(--Red500);
+  --color-icon-accent-blue: var(--Blue500);
 
   /* Border */
   --color-border: var(--DarkNeutral300A);
@@ -464,6 +466,7 @@
   --color-icon-accent-green: var(--Green500);
   --color-icon-accent-yellow: var(--Yellow500);
   --color-icon-accent-red: var(--Red500);
+  --color-icon-accent-blue: var(--Blue500);
 
   /* Border */
   --color-border: var(--DarkNeutral300A);
@@ -602,6 +605,7 @@
   --color-icon-accent-green: var(--Green500);
   --color-icon-accent-yellow: var(--Yellow500);
   --color-icon-accent-red: var(--Red500);
+  --color-icon-accent-blue: var(--Blue500);
 
   /* Border */
   --color-border: var(--DarkNeutral300A);
@@ -737,6 +741,7 @@
   --color-icon-accent-green: var(--Green600);
   --color-icon-accent-yellow: var(--Yellow300);
   --color-icon-accent-red: var(--Red600);
+  --color-icon-accent-blue: var(--Blue600);
 
   /* Border */
   --color-border: var(--Neutral300A);

@@ -4,10 +4,12 @@ import cx from "classix";
 import { MdDeleteOutline } from "react-icons/md";
 import { IoCloseOutline } from "react-icons/io5";
 import { IssueId } from "@domain/issue";
-import { TaskIcon } from "@app/components/icons";
+import { IssueTypeId } from "@domain/issue-type";
+import { IssueTypeIcon } from "@app/components/issue-type-icon";
 
 export const PanelHeaderIssue = ({
   id,
+  type,
   deleteDisabled,
 }: PanelHeaderIssueProps): JSX.Element => {
   const location = useLocation();
@@ -17,7 +19,7 @@ export const PanelHeaderIssue = ({
     <div className="flex">
       <span className="flex flex-grow items-center">
         <span className="flex items-center">
-          <TaskIcon size={20} />
+          <IssueTypeIcon type={type || "task"} size={20} />
         </span>
         <span className="ml-1 text-font-subtlest text-opacity-80">{id}</span>
       </span>
@@ -35,6 +37,7 @@ export const PanelHeaderIssue = ({
 
 interface PanelHeaderIssueProps {
   id: IssueId;
+  type?: IssueTypeId;
   deleteDisabled?: boolean;
 }
 

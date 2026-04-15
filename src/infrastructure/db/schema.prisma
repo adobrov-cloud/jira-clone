@@ -49,6 +49,7 @@ model Issue {
   categoryId  String
   name        String
   description String?
+  type        String    @default("task")
   reporter    User      @relation("issue_reporter", fields: [reporterId], references: [id])
   reporterId  String
   asignee     User      @relation("issue_assignee", fields: [asigneeId], references: [id])

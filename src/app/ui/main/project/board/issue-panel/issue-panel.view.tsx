@@ -24,6 +24,7 @@ import { PanelHeaderIssue } from "./panel-header-issue";
 import { CreateComment } from "./comment/create-comment";
 import { ViewComment } from "./comment/view-comment";
 import { SelectStatus } from "./select-status";
+import { SelectIssueType } from "./select-issue-type";
 import { SelectPriority } from "./select-priority";
 import { SelectAsignee } from "./select-asignee";
 import { CreatedUpdatedAt } from "./created-updated-at";
@@ -133,6 +134,7 @@ export const IssuePanel = ({ issue }: Props): JSX.Element => {
             >
               <PanelHeaderIssue
                 id={issue?.id || "Create new issue"}
+                type={issue?.type}
                 deleteDisabled={
                   userIsNotReporter ||
                   defaultIssuesIds.includes(issue?.id || "")
@@ -180,6 +182,10 @@ export const IssuePanel = ({ issue }: Props): JSX.Element => {
                       <SelectStatus
                         initStatus={issue?.categoryType || initStatus}
                       />
+                    </div>
+                    <div>
+                      <p className="mb-1">Type</p>
+                      <SelectIssueType initType={issue?.type || "task"} />
                     </div>
                     <div>
                       <p className="mb-1">Priority</p>
