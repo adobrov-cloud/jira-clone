@@ -4,12 +4,15 @@ import { CategoryId, CategoryType } from "@domain/category";
 import { useProjectStore } from "@app/ui/main/project";
 import * as Select from "@app/components/select";
 
+/**
+ * Returns the list of categories available for status transitions.
+ * Enforces workflow rule: PLANNED issues can only transition to TODO,
+ * preventing them from skipping stages in the workflow.
+ */
 const getAvailableCategories = (
   allCategories: Array<{ type: CategoryType; id: CategoryId; name: string }>,
   initStatus: CategoryType
 ) => {
-  // Planned issues can only transition to TODO, not skip ahead to IN_PROGRESS or DONE
-  // This enforces a linear workflow where planned work must be explicitly moved to TODO first
   if (initStatus === "PLANNED") {
     return allCategories.filter(
       (cat) => cat.type === "PLANNED" || cat.type === "TODO"
@@ -81,8 +84,8 @@ export const SelectStatus = ({ initStatus }: Props): JSX.Element => {
       <Select.Content>
         <Select.ScrollUpButton />
         <Select.Viewport>
-          {categories.map((category, index) => (
-            <Select.Item key={index} value={category.id}>
+          {categories.map((category) => (
+            <Select.Item key={category.id} value={category.id}>
               <Select.ItemIndicator />
               <span
                 className={cx(

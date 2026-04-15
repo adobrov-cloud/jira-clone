@@ -5,16 +5,13 @@ import { Project } from "@domain/project";
 import { Category, CategoryType } from "@domain/category";
 import { Issue } from "@domain/issue";
 import { usersMock, userMock1, userMock2 } from "@domain/user";
-import {
-  priorityHigh,
-  priorityMedium,
-  priorityLow,
-} from "@domain/priority";
+import { priorityHigh, priorityMedium, priorityLow } from "@domain/priority";
 
-// Mock data for Storybook stories demonstrating the 4-column board
-// (PLANNED, TODO, IN_PROGRESS, DONE)
-// The PLANNED column is a new addition that represents work in the
-// planning/backlog stage
+/**
+ * Mock data for the board view stories.
+ * The board supports a 4-column workflow: PLANNED → TODO → IN_PROGRESS → DONE
+ * PLANNED represents the backlog/planning stage before work begins.
+ */
 
 const plannedIssues: Issue[] = [
   {
@@ -148,8 +145,7 @@ const doneIssues: Issue[] = [
   },
 ];
 
-// Categories ordered by workflow:
-// PLANNED (0) → TODO (1) → IN_PROGRESS (2) → DONE (3)
+// Categories must be ordered by workflow sequence for correct board display
 const categories: Category[] = [
   {
     id: "cat-planned-001",
@@ -255,11 +251,5 @@ export const WithEmptyPlanned: Story = {
         cat.type === "PLANNED" ? { ...cat, issues: [] } : cat
       ),
     },
-  },
-};
-
-export const AllColumnsWithIssues: Story = {
-  args: {
-    project: mockProject,
   },
 };

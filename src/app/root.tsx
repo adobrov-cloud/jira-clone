@@ -25,13 +25,13 @@ import { Error404 } from "./components/error-404";
 import { Error500 } from "./components/error-500";
 import styles from "./styles/app-compiled.css";
 import fonts from "./styles/fonts.css";
-import fuck from "react-toastify/dist/ReactToastify.css";
+import toastifyCss from "react-toastify/dist/ReactToastify.css";
 
 export const links = () => {
   return [
     { rel: "stylesheet", href: fonts },
     { rel: "stylesheet", href: styles },
-    { rel: "stylesheet", href: fuck },
+    { rel: "stylesheet", href: toastifyCss },
     { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
   ];
 };
@@ -39,7 +39,8 @@ export const links = () => {
 export const meta: V2_MetaFunction = () => {
   const title = "Jira clone";
   const description =
-    "Task manager application inspired in Jira. Side project made with Remix, React, Tailwind, TypeScript and more.";
+    "Task manager application inspired in Jira. Side project made with " +
+    "Remix, React, Tailwind, TypeScript and more.";
   const image =
     "https://jira-clone.fly.dev/static/images/select-theme-light.png";
   const url = "https://jira-clone.fly.dev";
@@ -137,7 +138,9 @@ const App = (): JSX.Element => {
                 (function () {
                   if (typeof window === 'undefined') return;
 
-                  const isSystemThemeDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  const isSystemThemeDark = window.matchMedia(
+                    '(prefers-color-scheme: dark)'
+                  ).matches;
                     
                   if (isSystemThemeDark) {
                     const htmlElement = document.documentElement;
@@ -169,7 +172,8 @@ const errorComponentStyle: CSSProperties = {
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
   const errorMessage =
-    "It seems there is a critical error! Please try again or contact me at: danielserrano.contacto@gmail.com";
+    "It seems there is a critical error! Please try again or contact " +
+    "me at: danielserrano.contacto@gmail.com";
 
   return (
     // Inline styles because tailwind is not loaded at this point

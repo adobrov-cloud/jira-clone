@@ -12,8 +12,9 @@ import { useSortBy } from "@app/hooks/useSortBy";
 import { IssueCard, DropItem, DRAG_ISSUE_CARD } from "./issue-card";
 
 /**
- * Determines if a dragged issue can be dropped into a target column
- * Enforces workflow rule: PLANNED issues can only move to TODO or stay in PLANNED
+ * Determines if a dragged issue can be dropped into a target column.
+ * Enforces the workflow rule: PLANNED issues can only transition to TODO,
+ * preventing them from skipping ahead to IN_PROGRESS or DONE.
  */
 const canDropIssue = (
   draggedItem: DropItem,
@@ -144,8 +145,8 @@ export const CategoryColumn = (props: CategoryColumnProps): JSX.Element => {
               {emptyCategory ? (
                 <EmptyCategory />
               ) : (
-                filteredIssues().map((issue, index) => (
-                  <li key={index} className="mb-2">
+                filteredIssues().map((issue) => (
+                  <li key={issue.id} className="mb-2">
                     <IssueCard
                       issue={issue}
                       categoryId={category.id}
