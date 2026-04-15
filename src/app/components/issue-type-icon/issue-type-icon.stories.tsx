@@ -1,42 +1,45 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IssueTypeIcon } from "./issue-type-icon";
+import { issueTypes } from "@domain/issue-type";
 
-const meta = {
+const meta: Meta<typeof IssueTypeIcon> = {
   title: "Components/IssueTypeIcon",
   component: IssueTypeIcon,
-  tags: ["autodocs"],
+  parameters: {
+    layout: "centered",
+  },
   argTypes: {
     type: {
-      control: "select",
-      options: ["task", "bug", "story"],
+      control: {
+        type: "select",
+      },
+      options: issueTypes,
     },
     size: {
-      control: "number",
+      control: {
+        type: "number",
+      },
     },
   },
-} satisfies Meta<typeof IssueTypeIcon>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof IssueTypeIcon>;
 
-export const AllTypes: Story = {
-  args: {
-    type: "task",
-    size: 24,
-  },
+export const AllVariants: Story = {
   render: () => (
-    <div className="flex items-center gap-6 p-4">
+    <div className="flex items-center gap-6">
       <div className="flex flex-col items-center gap-2">
         <IssueTypeIcon type="task" size={24} />
-        <span className="text-sm text-font-subtle">Task (Blue)</span>
+        <span className="text-sm text-text-subtle">Task</span>
       </div>
       <div className="flex flex-col items-center gap-2">
         <IssueTypeIcon type="bug" size={24} />
-        <span className="text-sm text-font-subtle">Bug (Red)</span>
+        <span className="text-sm text-text-subtle">Bug</span>
       </div>
       <div className="flex flex-col items-center gap-2">
         <IssueTypeIcon type="story" size={24} />
-        <span className="text-sm text-font-subtle">Story (Green)</span>
+        <span className="text-sm text-text-subtle">Story</span>
       </div>
     </div>
   ),
@@ -56,16 +59,20 @@ export const Bug: Story = {
   },
 };
 
-export const StoryType: Story = {
+export const IssueStory: Story = {
   args: {
     type: "story",
     size: 18,
   },
 };
 
-export const Large: Story = {
-  args: {
-    type: "bug",
-    size: 32,
-  },
+export const LargeSizes: Story = {
+  render: () => (
+    <div className="flex items-center gap-4">
+      <IssueTypeIcon type="task" size={16} />
+      <IssueTypeIcon type="task" size={24} />
+      <IssueTypeIcon type="task" size={32} />
+      <IssueTypeIcon type="task" size={48} />
+    </div>
+  ),
 };

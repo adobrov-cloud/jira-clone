@@ -73,7 +73,7 @@ export const getProject = async (
       issues: category.issues.map((issue) => ({
         id: issue.id,
         name: issue.name,
-        type: ((issue as any).type as IssueTypeId) || "task",
+        type: (issue.type as IssueTypeId) || "task",
         priority: issue.priority as Priority,
         reporter: dnull(issue.reporter),
         asignee: dnull(issue.asignee),

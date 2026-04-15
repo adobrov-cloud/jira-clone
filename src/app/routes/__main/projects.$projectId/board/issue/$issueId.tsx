@@ -30,6 +30,13 @@ import { emitter, EVENTS } from "@app/events";
 import { formatTags, formatProperties } from "@utils/meta";
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+  if (!data) {
+    return [
+      { title: "Jira clone - Error" },
+      { name: "description", content: "An error occurred" },
+    ];
+  }
+
   const { issue, projectId } = data as LoaderData;
   const title = `Jira clone - ${issue.name}`;
   const description = issue.description || "No description";
