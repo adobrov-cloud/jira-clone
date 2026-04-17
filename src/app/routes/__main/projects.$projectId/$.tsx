@@ -31,3 +31,4 @@ export function CatchBoundary() {
 export default function Error404Route() {
   return null;
 }
+

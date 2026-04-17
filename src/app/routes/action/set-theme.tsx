@@ -23,3 +23,4 @@ export const action: ActionFunction = async ({ request }) => {
 export default function SetThemeAction() {
   return <div>Oops... You should not see this.</div>;
 }
+

@@ -95,3 +95,4 @@ export default function ProjectsRoute() {
   const { projectsSummary } = useLoaderData() as LoaderData;
   return <ProjectsView projectsSummary={projectsSummary} />;
 }
+
