@@ -1,28 +1,31 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { projectMock1 } from "@domain/project";
-import { usersMock } from "@domain/user";
-import { withRemixStub, withMainContext } from "@app/stories/utils";
+import { unstable_createRemixStub as createRemixStub } from "@remix-run/testing";
 import { CreateProjectPanelView } from "./create-project-panel.view";
+import { usersMock, userMock1 } from "@domain/user";
+import { UserContextProvider } from "@app/store/user.store";
 
 const meta: Meta<typeof CreateProjectPanelView> = {
-  title: "Pages/Projects/CreateProjectPanelView",
+  title: "UI/Projects/CreateProjectPanelView",
   component: CreateProjectPanelView,
   parameters: {
-    layout: "centered",
+    layout: "fullscreen",
   },
-  argTypes: {
-    project: {
-      control: {
-        type: "object",
-      },
+  decorators: [
+    (Story) => {
+      const RemixStub = createRemixStub([
+        {
+          path: "/*",
+          Component: () => (
+            <UserContextProvider user={userMock1}>
+              <Story />
+            </UserContextProvider>
+          ),
+          action: () => ({ ok: true }),
+        },
+      ]);
+      return <RemixStub initialEntries={["/projects/new"]} />;
     },
-    users: {
-      control: {
-        type: "object",
-      },
-    },
-  },
-  decorators: [(Story) => withRemixStub(withMainContext(Story))],
+  ],
 };
 
 export default meta;
@@ -30,7 +33,19 @@ type Story = StoryObj<typeof CreateProjectPanelView>;
 
 export const Default: Story = {
   args: {
-    project: projectMock1,
-    users: usersMock,
+    users: usersMock.slice(0, 5),
+  },
+};
+
+export const WithProject: Story = {
+  args: {
+    project: {
+      id: "project-1",
+      name: "My Test Project",
+      description: "This is a sample project description for testing purposes.",
+      image: "/images/default-project.png",
+      users: [userMock1],
+    },
+    users: usersMock.slice(0, 5),
   },
 };
