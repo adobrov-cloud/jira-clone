@@ -196,3 +196,4 @@ export default function IssuePanelRoute() {
   const { issue } = useLoaderData() as LoaderData;
   return <IssuePanel issue={issue} />;
 }
+

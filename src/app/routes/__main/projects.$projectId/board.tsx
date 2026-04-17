@@ -129,3 +129,4 @@ export default function BoardRoute() {
   const { project } = useLoaderData() as LoaderData;
   return <BoardView project={project} />;
 }
+

@@ -121,3 +121,4 @@ export const action: ActionFunction = async ({ request, params }) => {
 export default function IssuePanelRoute() {
   return <IssuePanel />;
 }
+

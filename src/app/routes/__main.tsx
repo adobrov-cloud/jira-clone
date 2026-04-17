@@ -35,3 +35,4 @@ export default function AppRoute() {
   const { user } = useLoaderData() as LoaderData;
   return <MainLayout user={user} />;
 }
+

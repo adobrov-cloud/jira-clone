@@ -97,3 +97,4 @@ export default function ProjectRoute() {
   const { name, description, image } = projectSummary;
   return <ProjectView name={name} description={description} image={image} />;
 }
+
