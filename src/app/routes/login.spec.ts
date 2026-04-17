@@ -16,3 +16,4 @@ test("login and redirect", async ({ page }) => {
 
   await expect(page).toHaveURL(/.*projects/);
 });
+
