@@ -122,3 +122,4 @@ export default function IssuePanelRoute() {
   const { users } = useLoaderData() as LoaderData;
   return <CreateProjectPanelView users={users} />;
 }
+
