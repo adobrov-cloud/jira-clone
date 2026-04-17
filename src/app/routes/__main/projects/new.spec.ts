@@ -1,33 +1,41 @@
 import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
+/**
+ * Maximum character length for project names.
+ * Ensures compatibility with database constraints and UI display.
+ */
+const MAX_PROJECT_NAME_LENGTH = 30;
+
+/**
+ * Generates a unique project name using timestamp and random product name.
+ * Truncates to maximum length to comply with project name constraints.
+ */
+function generateUniqueProjectName(): string {
+  const timestamp = new Date().toISOString();
+  const productName = faker.commerce.productName();
+  const fullName = `${timestamp} ${productName}`;
+  return fullName.substring(0, MAX_PROJECT_NAME_LENGTH);
+}
+
 test("create new project with dynamic name", async ({ page }) => {
-  // Login flow
+  // Login as default user
   await page.goto("/login");
   await page.getByRole("button", { name: "Login" }).click();
   await expect(page).toHaveURL(/.*projects/);
 
-  // Navigate to create project page
+  // Navigate to project creation form
   await page.goto("/projects/new");
 
-  // Generate dynamic project name
-  const timestamp = new Date().toISOString();
-  const productName = faker.commerce.productName();
-  const fullName = `${timestamp} ${productName}`;
-  const projectName = fullName.substring(0, 30);
+  const projectName = generateUniqueProjectName();
 
-  // Fill in the project name
+  // Fill in the project name (user is pre-selected by default)
   await page.locator('textarea[name="title"]').fill(projectName);
 
-  // The logged-in user (Daniel Serrano) is already pre-selected by default
-  // No need to manually select a user
-
-  // Submit the form
+  // Submit and wait for redirect to projects list
   await page.getByRole("button", { name: "Accept changes" }).click();
-
-  // Wait for redirect to projects list
   await expect(page).toHaveURL(/^(?!.*\/new).*\/projects$/);
 
-  // Verify the project appears in the list
+  // Verify the newly created project appears in the list
   await expect(page.getByText(projectName)).toBeVisible();
 });
